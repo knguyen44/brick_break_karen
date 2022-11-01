@@ -11,8 +11,9 @@ namespace brick_break_karen
         private SpriteBatch _spriteBatch;
 
         GameConsole console;
-
+        ScoreManager scoreManager;
         MonogameBlock block;
+        BlockManager blockManager;
         Ball ball;
         Paddle paddle;
 
@@ -25,8 +26,14 @@ namespace brick_break_karen
             console = new GameConsole(this);
             this.Components.Add(console);
 
+            scoreManager = new ScoreManager(this);
+            this.Components.Add(scoreManager);
+
             block = new MonogameBlock(this);
             this.Components.Add(block);
+
+            blockManager = new BlockManager(this, ball);
+            this.Components.Add(blockManager);
 
             ball = new Ball(this);
             this.Components.Add(ball);

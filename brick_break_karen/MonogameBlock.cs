@@ -11,9 +11,15 @@ namespace brick_break_karen
 {
     public class MonogameBlock : DrawableSprite
     {
-        Block block;
+        Block block; //has a block
         string NormalTextureName, HitTextureName;
         Texture2D NormalTexture, HitTexture;
+
+        public BlockState BlockState
+        {
+            get { return this.block.BlockState; }
+            set { this.block.BlockState = value; }
+        }
 
         public MonogameBlock(Game game) : base(game)
         {
@@ -41,16 +47,25 @@ namespace brick_break_karen
             switch (block.BlockState)
             {
                 case BlockState.Normal:
+                    this.Visible = true;
                     this.spriteTexture = NormalTexture;
                     break;
                     case BlockState.Hit:
                     this.spriteTexture = HitTexture;
+                    break;
+                case BlockState.Broken:
+                    this.Visible = false;
+                    this.spriteTexture = NormalTexture;
                     break;
             }
         }
         public void HitByBall()
         {
             this.block.Hit();
+        }
+        public void HitByBall(Ball ball)
+        {
+            this.HitByBall();
         }
     }
 }

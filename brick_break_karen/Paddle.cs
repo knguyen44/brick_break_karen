@@ -1,6 +1,7 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameLibrary.Sprite;
+using MonoGameLibrary.Util;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,6 +12,9 @@ namespace brick_break_karen
 {
     public class Paddle : DrawableSprite
     {
+        GameConsole console;
+        Random r;
+
         Ball ball;
         PaddleController controller;
 
@@ -19,6 +23,8 @@ namespace brick_break_karen
             this.Speed = 210;
             ball = b;
             this.controller = new PaddleController(this.Game, ball);
+
+            r = new Random();
         }
 
         Rectangle collisionRectangle;  //Rectangle for paddle collision uses just the top of the paddle instead of the whole sprite
@@ -60,6 +66,58 @@ namespace brick_break_karen
         private void UpdateCheckBallCollision()
         {
             //Ball Collsion
+            //Very simple collision with ball only uses rectangles
+            if (collisionRectangle.Intersects(ball.LocationRect))
+            {
+                //TODO Change angle based on location of collision or direction of paddle
+                ball.Direction.Y *= -1;
+                UpdateBallCollisionBasedOnPaddleImpactLocation();
+                UpdateBallCollisionRandomFuness();
+                console.GameConsoleWrite("Paddle collision ballLoc:" + ball.Location + " paddleLoc:" + this.Location.ToString());
+            }
+        }
+        private void UpdateBallCollisionBasedOnPaddleImpactLocation()
+        {
+            //Change angle based on paddle movement
+            if (this.Direction.X > 0)
+            {
+                ball.Direction.X += .1f;
+            }
+            if (this.Direction.X < 0)
+            {
+                ball.Direction.X -= .1f;
+            }
+            //Change anlge based on side of paddle
+            //First Third
+
+            if ((ball.Location.X > this.Location.X) && (ball.Location.X < this.Location.X + this.spriteTexture.Width / 3))
+            {
+                console.GameConsoleWrite("1st Third");
+                ball.Direction.X += .1f;
+            }
+            if ((ball.Location.X > this.Location.X + (this.spriteTexture.Width / 3)) && (ball.Location.X < this.Location.X + (this.spriteTexture.Width / 3) * 2))
+            {
+                console.GameConsoleWrite("2nd third");
+            }
+            if ((ball.Location.X > (this.Location.X + (this.spriteTexture.Width / 3) * 2)) && (ball.Location.X < this.Location.X + (this.spriteTexture.Width)))
+            {
+                console.GameConsoleWrite("3rd third");
+                ball.Direction.X -= .1f;
+            }
+        }
+        private void UpdateBallCollisionRandomFuness()
+        {
+            /// 
+            /// Adds a bit of entropy to bounce nothing should be perfect
+            /// 
+            /// 
+            ball.Direction.Y = GetReflectEntropy();
+        }
+
+
+        private float GetReflectEntropy()
+        {
+            return -1 + ((r.Next(0, 3) - 1) * 0.1f); //return -.9, -1 or -1.1
         }
         private void KeepPaddleOnScreen()
         {

@@ -85,5 +85,11 @@ namespace brick_break_karen
             this.State = BallState.Playing;
             this.Direction = new Vector2(1, -1); //launch left and up TODO check this
         }
+
+        internal void Reflect(MonogameBlock b)
+        {
+            //simple
+            this.Direction *= -1;
+        }
     }
 }
