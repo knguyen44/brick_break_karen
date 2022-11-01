@@ -1,0 +1,8 @@
+﻿The ball respawns when it hits bottom of screen, so paddle is more valuable to use.
+In the Ball class, I added new method, respawnBall();. And had the Update method use it.
+
+When balls hit bottom of the screen, lives decrease by 1.
+Also, in the respawnBall(); method, I accessed the ScoreManager.Lives and simply subtracted it by 1.
+
+When lives reach 0, everything resets. But, I couldn't get the game to restart itself (the blocks are still the same).
+In the respawnBall(); method, I intialized Game1 to run game.Exit();.

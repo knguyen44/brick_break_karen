@@ -2,9 +2,11 @@
 using Microsoft.Xna.Framework.Graphics;
 using MonoGameLibrary.Sprite;
 using MonoGameLibrary.Util;
+using SharpDX.Direct3D9;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,6 +16,9 @@ namespace brick_break_karen
 
     public class Ball : DrawableSprite
     {
+        SpriteBatch sb;
+        SpriteFont font;
+
         GameConsole console;
         public BallState State;
 
@@ -33,6 +38,9 @@ namespace brick_break_karen
         }
         protected override void LoadContent()
         {
+            sb = new SpriteBatch(this.Game.GraphicsDevice);
+            font = this.Game.Content.Load<SpriteFont>("Arial");
+
             this.spriteTexture = this.Game.Content.Load<Texture2D>("ballSmall");
             base.LoadContent();
 
@@ -67,6 +75,12 @@ namespace brick_break_karen
         private void respawnBall()
         {
             this.State = BallState.OnPaddleStart;
+            ScoreManager.Lives--;
+            if(ScoreManager.Lives == 0)
+            {
+                using var game = new brick_break_karen.Game1();
+                game.Exit();
+            }
 
         }
 

@@ -14,7 +14,6 @@ namespace brick_break_karen
     {
         //Service Dependencies
         GameConsole console;
-        ScoreManager scoreManager;
 
         //Dependencies
         PaddleController controller;
@@ -25,8 +24,6 @@ namespace brick_break_karen
         public Paddle(Game game, Ball b)
             : base(game)
         {
-            scoreManager = new ScoreManager(game);
-
             this.autopaddle = true;
             this.Speed = 300;
             this.ball = b;
