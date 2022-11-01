@@ -6,26 +6,29 @@ using System.Threading.Tasks;
 
 namespace brick_break_karen
 {
-    public enum BlockState
-    {
-        Normal, Hit, Broken
-    }
+    public enum BlockState { Normal, Hit, Broken }
+
     public class Block
     {
+        protected int hitCount; //Future use maybe should change state?
+        protected uint blockID;
+
+        protected static uint blockCount;
+
         public BlockState BlockState { get; set; }
 
-        int hitCount;
         public Block()
         {
             this.BlockState = BlockState.Normal;
+            blockCount++;
+            this.blockID = blockCount;
         }
-        public void Hit()
+        public virtual void Hit()
         {
             this.hitCount++;
-
-            //Assuming when it hit it updates blockstate
             this.UpdateBlockState();
         }
+
         public virtual void UpdateBlockState()
         {
             switch (this.hitCount)
@@ -39,7 +42,11 @@ namespace brick_break_karen
                 case 2:
                     this.BlockState = BlockState.Broken;
                     break;
+                default:
+                    this.BlockState = BlockState.Broken;
+                    break;
             }
+
         }
     }
 }

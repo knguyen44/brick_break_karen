@@ -39,6 +39,10 @@ namespace brick_break_karen
             //TODO probably need to put this on the paddle as soon as I have paddle
             this.Location = new Vector2(200, 200);
         }
+        protected override void UnloadContent()
+        {
+            base.UnloadContent();
+        }
 
         //private time between frames
         float time;
@@ -47,12 +51,23 @@ namespace brick_break_karen
         {
             time = (float)gameTime.ElapsedGameTime.Milliseconds / 1000;
             this.keepBallOnScreen();
+
+            //Balls hits bottom, then respawns
+            if ((this.Location.Y > this.GraphicsDevice.Viewport.Height - this.spriteTexture.Height))
+                this.respawnBall();
+
             this.UpdateBall();
             this.Location += this.Direction * (this.Speed * time);
             base.Update(gameTime);
 
             //Log Ball location to console
             console.Log("Ball Location", this.Location.ToString());
+        }
+
+        private void respawnBall()
+        {
+            this.State = BallState.OnPaddleStart;
+
         }
 
         private void UpdateBall()
@@ -63,7 +78,7 @@ namespace brick_break_karen
                     this.Speed = 0;
                     break;
                 case BallState.Playing:
-                    this.Speed = 200;
+                    this.Speed = 400;
                     break;
             }
         }
@@ -74,7 +89,7 @@ namespace brick_break_karen
             if ((this.Location.X < 0) ||
                 (this.Location.X > this.GraphicsDevice.Viewport.Width - this.spriteTexture.Width))
                 this.Direction.X *= -1;
-            //Left and Right
+            //Up abd Down
             if ((this.Location.Y < 0) ||
                 (this.Location.Y > this.GraphicsDevice.Viewport.Height - this.spriteTexture.Height))
                 this.Direction.Y *= -1;
